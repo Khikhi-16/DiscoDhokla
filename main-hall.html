@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Party Time!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0020;
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── BACKGROUND SCENE ── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ── CONTENT LAYER ── */
+    #content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Boogaloo', cursive;
+      font-size: clamp(3rem, 10vw, 7rem);
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 30px #f472b6, 0 0 60px #c084fc;
+      animation: titlePop 1s cubic-bezier(.36,1.56,.64,1) both;
+      text-align: center;
+    }
+
+    p.sub {
+      margin-top: 1rem;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: #e9d5ff;
+      letter-spacing: 2px;
+      text-align: center;
+      animation: fadeUp 1.2s 0.3s ease both;
+    }
+
+    .btn {
+      margin-top: 2.5rem;
+      padding: 1rem 2.8rem;
+      background: linear-gradient(135deg, #f472b6, #c084fc);
+      color: #fff;
+      font-family: 'Boogaloo', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 30px #f472b699;
+      animation: fadeUp 1.2s 0.6s ease both;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover {
+      transform: scale(1.08) translateY(-3px);
+      box-shadow: 0 8px 40px #f472b6cc;
+    }
+
+    @keyframes titlePop {
+      from { opacity: 0; transform: scale(0.5) rotate(-6deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SVG ANIMATIONS ── */
+    @keyframes spin { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+    @keyframes floatA { 0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)} }
+    @keyframes floatB { 0%,100%{transform:translateY(-6px) rotate(2deg)}50%{transform:translateY(8px) rotate(-2deg)} }
+    @keyframes floatC { 0%,100%{transform:translateY(4px)}50%{transform:translateY(-10px)} }
+    @keyframes rain { 0%{transform:translateY(-30px) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0} }
+    @keyframes beam1 { 0%,100%{opacity:0.07}33%{opacity:0.22}66%{opacity:0.05} }
+    @keyframes beam2 { 0%,100%{opacity:0.14}40%{opacity:0.04}80%{opacity:0.2} }
+    @keyframes beam3 { 0%,100%{opacity:0.05}50%{opacity:0.18} }
+    @keyframes pop { 0%,100%{transform:scale(1)}50%{transform:scale(1.08)} }
+    @keyframes zigzag { 0%,100%{transform:translateX(0)}25%{transform:translateX(8px)}75%{transform:translateX(-8px)} }
+    @keyframes starTwinkle { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.2;transform:scale(0.6)} }
+    @keyframes rainbowShift { 0%{fill:#f472b6}16%{fill:#fb923c}33%{fill:#fbbf24}50%{fill:#4ade80}66%{fill:#38bdf8}83%{fill:#c084fc}100%{fill:#f472b6} }
+
+    .disco-spin { animation: spin 3s linear infinite; transform-origin: 50% 55px; transform-box: fill-box; }
+    .ba { animation: floatA 3.2s ease-in-out infinite; }
+    .bb { animation: floatB 2.8s ease-in-out infinite; }
+    .bc { animation: floatC 3.8s ease-in-out infinite; }
+    .c1{animation:rain 4s linear infinite}
+    .c2{animation:rain 5s .5s linear infinite}
+    .c3{animation:rain 3.5s 1s linear infinite}
+    .c4{animation:rain 4.5s 1.7s linear infinite}
+    .c5{animation:rain 3.8s .3s linear infinite}
+    .c6{animation:rain 5.2s 2.2s linear infinite}
+    .c7{animation:rain 4.1s .8s linear infinite}
+    .c8{animation:rain 3.6s 2.8s linear infinite}
+    .c9{animation:rain 4.8s 1.3s linear infinite}
+    .c10{animation:rain 5.5s .1s linear infinite}
+    .c11{animation:rain 3.9s 3.1s linear infinite}
+    .c12{animation:rain 4.3s 1.9s linear infinite}
+    .beam1{animation:beam1 1.3s ease-in-out infinite}
+    .beam2{animation:beam2 1.7s ease-in-out infinite}
+    .beam3{animation:beam3 2.1s ease-in-out infinite}
+    .pop{animation:pop 2s ease-in-out infinite}
+    .zz{animation:zigzag 1.6s ease-in-out infinite}
+    .tw1{animation:starTwinkle 1.1s ease-in-out infinite;transform-origin:160px 130px;transform-box:fill-box}
+    .tw2{animation:starTwinkle 1.7s .4s ease-in-out infinite;transform-origin:490px 115px;transform-box:fill-box}
+    .tw3{animation:starTwinkle 1.4s .9s ease-in-out infinite;transform-origin:80px 220px;transform-box:fill-box}
+    .tw4{animation:starTwinkle 1.9s .2s ease-in-out infinite;transform-origin:570px 200px;transform-box:fill-box}
+    .tw5{animation:starTwinkle 1.2s 1.3s ease-in-out infinite;transform-origin:270px 85px;transform-box:fill-box}
+    .tw6{animation:starTwinkle 2s .6s ease-in-out infinite;transform-origin:430px 180px;transform-box:fill-box}
+    .rainbow{animation:rainbowShift 2s linear infinite}
+  </style>
+</head>
+<body>
+
+<!-- BACKGROUND SVG -->
+<div id="bg">
+<svg width="100%" height="100%" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="600" fill="#0d0020"/>
+  <rect width="1000" height="420" fill="#160030"/>
+  <rect y="420" width="1000" height="180" fill="#1a0035"/>
+  <line x1="0" y1="420" x2="1000" y2="420" stroke="#3b0080" stroke-width="2"/>
+
+  <!-- Bg diamond pattern -->
+  <g opacity="0.06" fill="#c084fc">
+    <rect x="60" y="40" width="8" height="8" transform="rotate(45 64 44)"/>
+    <rect x="180" y="40" width="8" height="8" transform="rotate(45 184 44)"/>
+    <rect x="300" y="40" width="8" height="8" transform="rotate(45 304 44)"/>
+    <rect x="420" y="40" width="8" height="8" transform="rotate(45 424 44)"/>
+    <rect x="540" y="40" width="8" height="8" transform="rotate(45 544 44)"/>
+    <rect x="660" y="40" width="8" height="8" transform="rotate(45 664 44)"/>
+    <rect x="780" y="40" width="8" height="8" transform="rotate(45 784 44)"/>
+    <rect x="900" y="40" width="8" height="8" transform="rotate(45 904 44)"/>
+    <rect x="120" y="110" width="8" height="8" transform="rotate(45 124 114)"/>
+    <rect x="240" y="110" width="8" height="8" transform="rotate(45 244 114)"/>
+    <rect x="360" y="110" width="8" height="8" transform="rotate(45 364 114)"/>
+    <rect x="480" y="110" width="8" height="8" transform="rotate(45 484 114)"/>
+    <rect x="600" y="110" width="8" height="8" transform="rotate(45 604 114)"/>
+    <rect x="720" y="110" width="8" height="8" transform="rotate(45 724 114)"/>
+    <rect x="840" y="110" width="8" height="8" transform="rotate(45 844 114)"/>
+    <rect x="60" y="180" width="8" height="8" transform="rotate(45 64 184)"/>
+    <rect x="180" y="180" width="8" height="8" transform="rotate(45 184 184)"/>
+    <rect x="300" y="180" width="8" height="8" transform="rotate(45 304 184)"/>
+    <rect x="420" y="180" width="8" height="8" transform="rotate(45 424 184)"/>
+    <rect x="540" y="180" width="8" height="8" transform="rotate(45 544 184)"/>
+    <rect x="660" y="180" width="8" height="8" transform="rotate(45 664 184)"/>
+    <rect x="780" y="180" width="8" height="8" transform="rotate(45 784 184)"/>
+    <rect x="900" y="180" width="8" height="8" transform="rotate(45 904 184)"/>
+  </g>
+
+  <!-- Disco ball -->
+  <g class="disco-spin" style="transform-origin:500px 55px">
+    <circle cx="500" cy="55" r="40" fill="#555566" stroke="#aaaacc" stroke-width="1"/>
+    <circle cx="500" cy="55" r="40" fill="none" stroke="#ccccff" stroke-width="0.4" stroke-dasharray="5,4"/>
+    <rect x="476" y="46" width="13" height="8" rx="1" fill="#d0d0ff" opacity="0.9"/>
+    <rect x="511" y="46" width="13" height="8" rx="1" fill="#ffd0d0" opacity="0.9"/>
+    <rect x="493" y="25" width="13" height="8" rx="1" fill="#d0ffd0" opacity="0.9"/>
+    <rect x="493" y="67" width="13" height="8" rx="1" fill="#fff0a0" opacity="0.9"/>
+    <rect x="462" y="34" width="11" height="7" rx="1" fill="#ffd0ff" opacity="0.8"/>
+    <rect x="527" y="34" width="11" height="7" rx="1" fill="#a0e8ff" opacity="0.8"/>
+    <rect x="462" y="65" width="11" height="7" rx="1" fill="#ffe0a0" opacity="0.8"/>
+    <rect x="527" y="65" width="11" height="7" rx="1" fill="#c0ffc0" opacity="0.8"/>
+  </g>
+  <line x1="500" y1="0" x2="500" y2="15" stroke="#aaa" stroke-width="2"/>
+
+  <!-- Light beams -->
+  <polygon points="500,95 20,420 160,420" fill="#f472b6" class="beam1"/>
+  <polygon points="500,95 120,420 260,420" fill="#c084fc" class="beam2"/>
+  <polygon points="500,95 260,420 400,420" fill="#38bdf8" class="beam3"/>
+  <polygon points="500,95 380,420 520,420" fill="#fbbf24" class="beam1"/>
+  <polygon points="500,95 500,420 640,420" fill="#4ade80" class="beam2"/>
+  <polygon points="500,95 620,420 760,420" fill="#fb923c" class="beam3"/>
+  <polygon points="500,95 760,420 900,420" fill="#f472b6" class="beam1"/>
+  <polygon points="500,95 880,420 1000,420" fill="#c084fc" class="beam2"/>
+  <polygon points="500,95 0,0 100,0" fill="#38bdf8" class="beam3"/>
+  <polygon points="500,95 900,0 1000,0" fill="#fbbf24" class="beam1"/>
+
+  <!-- Confetti -->
+  <rect class="c1" x="80" y="-10" width="9" height="6" rx="1" fill="#f472b6"/>
+  <rect class="c2" x="160" y="-25" width="7" height="5" rx="1" fill="#fbbf24"/>
+  <rect class="c3" x="260" y="-5" width="8" height="5" rx="1" fill="#4ade80"/>
+  <rect class="c4" x="360" y="-18" width="10" height="6" rx="1" fill="#38bdf8"/>
+  <rect class="c5" x="460" y="-8" width="7" height="7" rx="1" fill="#c084fc"/>
+  <rect class="c6" x="560" y="-20" width="9" height="5" rx="1" fill="#fb923c"/>
+  <rect class="c7" x="660" y="-12" width="8" height="6" rx="1" fill="#f472b6"/>
+  <rect class="c8" x="740" y="-6" width="7" height="5" rx="1" fill="#fbbf24"/>
+  <rect class="c9" x="840" y="-22" width="10" height="6" rx="1" fill="#4ade80"/>
+  <rect class="c10" x="920" y="-10" width="8" height="7" rx="1" fill="#38bdf8"/>
+  <circle class="c11" cx="120" cy="-15" r="5" fill="#fbbf24"/>
+  <circle class="c12" cx="700" cy="-8" r="4" fill="#f472b6"/>
+  <rect class="c3" x="40" y="-30" width="6" height="9" rx="1" fill="#c084fc" transform="rotate(30)"/>
+  <rect class="c7" x="500" y="-15" width="6" height="9" rx="1" fill="#fb923c" transform="rotate(-20)"/>
+  <rect class="c2" x="800" y="-20" width="6" height="9" rx="1" fill="#4ade80" transform="rotate(45)"/>
+
+  <!-- Banner 1 -->
+  <path d="M20,128 Q120,105 220,128 Q320,152 420,128 Q520,105 620,128 Q720,152 820,128 Q900,110 980,128" stroke="#e879f9" stroke-width="2" fill="none"/>
+  <g class="rainbow"><polygon points="35,128 62,128 48,160"/></g>
+  <polygon points="115,108 142,108 128,140" fill="#fbbf24"/>
+  <polygon points="195,130 222,130 208,162" fill="#4ade80"/>
+  <polygon points="275,152 302,152 288,184" fill="#38bdf8"/>
+  <polygon points="355,128 382,128 368,160" fill="#c084fc"/>
+  <polygon points="435,108 462,108 448,140" fill="#fb923c"/>
+  <polygon points="515,128 542,128 528,160" fill="#f472b6"/>
+  <polygon points="595,152 622,152 608,184" fill="#fbbf24"/>
+  <polygon points="675,128 702,128 688,160" fill="#4ade80"/>
+  <polygon points="755,108 782,108 768,140" fill="#38bdf8"/>
+  <polygon points="835,128 862,128 848,160" fill="#c084fc"/>
+  <polygon points="915,128 942,128 928,160" fill="#fb923c"/>
+
+  <!-- Banner 2 -->
+  <path d="M20,88 Q120,70 220,88 Q320,106 420,88 Q520,70 620,88 Q720,106 820,88 Q900,75 980,88" stroke="#f9a8d4" stroke-width="1.5" fill="none" stroke-dasharray="5,4"/>
+  <polygon points="70,88 90,88 80,110" fill="#f472b6" opacity="0.7"/>
+  <polygon points="190,106 210,106 200,128" fill="#fbbf24" opacity="0.7"/>
+  <polygon points="310,88 330,88 320,110" fill="#4ade80" opacity="0.7"/>
+  <polygon points="430,70 450,70 440,92" fill="#38bdf8" opacity="0.7"/>
+  <polygon points="550,88 570,88 560,110" fill="#c084fc" opacity="0.7"/>
+  <polygon points="670,106 690,106 680,128" fill="#fb923c" opacity="0.7"/>
+  <polygon points="790,88 810,88 800,110" fill="#f472b6" opacity="0.7"/>
+  <polygon points="910,74 930,74 920,96" fill="#fbbf24" opacity="0.7"/>
+
+  <!-- Streamers -->
+  <g class="zz">
+    <path d="M0,0 Q60,60 25,130 Q0,190 35,255 Q60,310 25,380" stroke="#f472b6" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M18,0 Q80,70 50,150 Q20,220 65,295 Q90,355 55,425" stroke="#fbbf24" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+  </g>
+  <g class="zz" style="animation-delay:0.8s">
+    <path d="M1000,0 Q940,60 975,130 Q1005,190 965,255 Q940,310 975,380" stroke="#38bdf8" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M982,0 Q920,70 955,150 Q985,220 945,295 Q920,355 958,425" stroke="#c084fc" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+  <!-- Stars -->
+  <g class="tw1"><polygon points="200,135 204,148 218,148 207,156 211,170 200,162 189,170 193,156 182,148 196,148" fill="#ffe4ff"/></g>
+  <g class="tw2"><polygon points="750,118 754,131 768,131 757,139 761,153 750,145 739,153 743,139 732,131 746,131" fill="#ffe4ff"/></g>
+  <g class="tw3"><circle cx="100" cy="240" r="6" fill="#ffd0ff"/><circle cx="100" cy="240" r="2.5" fill="#fff"/></g>
+  <g class="tw4"><circle cx="870" cy="215" r="6" fill="#d0f0ff"/><circle cx="870" cy="215" r="2.5" fill="#fff"/></g>
+  <g class="tw5"><circle cx="380" cy="92" r="5" fill="#ffffd0"/><circle cx="380" cy="92" r="2" fill="#fff"/></g>
+  <g class="tw6"><circle cx="640" cy="195" r="5" fill="#ffd0f0"/><circle cx="640" cy="195" r="2" fill="#fff"/></g>
+
+  <!-- Left balloons -->
+  <g class="ba" style="transform-origin:90px 300px">
+    <ellipse cx="80" cy="278" rx="26" ry="33" fill="#f472b6"/>
+    <ellipse cx="80" cy="271" rx="9" ry="7" fill="#ff9ec7" opacity="0.6"/>
+    <path d="M80,311 Q85,326 78,342" stroke="#be185d" stroke-width="2" fill="none"/>
+  </g>
+  <g class="bb" style="transform-origin:130px 285px">
+    <ellipse cx="130" cy="262" rx="24" ry="30" fill="#c084fc"/>
+    <ellipse cx="130" cy="256" rx="8" ry="6" fill="#ddb8ff" opacity="0.5"/>
+    <path d="M130,292 Q135,308 128,324" stroke="#7e22ce" stroke-width="2" fill="none"/>
+  </g>
+  <g class="bc" style="transform-origin:50px 288px">
+    <ellipse cx="42" cy="265" rx="20" ry="27" fill="#fbbf24"/>
+    <ellipse cx="42" cy="259" rx="7" ry="6" fill="#fde68a" opacity="0.5"/>
+    <path d="M42,292 Q47,306 40,320" stroke="#b45309" stroke-width="2" fill="none"/>
+  </g>
+  <g class="ba" style="transform-origin:170px 315px;animation-delay:0.6s">
+    <ellipse cx="172" cy="300" rx="20" ry="25" fill="#4ade80"/>
+    <ellipse cx="172" cy="295" rx="7" ry="5" fill="#bbf7d0" opacity="0.5"/>
+    <path d="M172,325 Q176,337 170,350" stroke="#166534" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- Center balloon cluster -->
+  <g class="pop" style="transform-origin:500px 240px">
+    <ellipse cx="474" cy="228" rx="24" ry="30" fill="#f472b6"/>
+    <ellipse cx="474" cy="222" rx="8" ry="6" fill="#fce7f3" opacity="0.6"/>
+    <ellipse cx="508" cy="210" rx="26" ry="33" fill="#c084fc"/>
+    <ellipse cx="508" cy="203" rx="9" ry="7" fill="#f3e8ff" opacity="0.6"/>
+    <ellipse cx="540" cy="228" rx="22" ry="28" fill="#fbbf24"/>
+    <ellipse cx="540" cy="222" rx="7" ry="6" fill="#fef9c3" opacity="0.6"/>
+    <path d="M474,258 Q491,272 508,258 Q525,272 540,253 Q525,275 508,288 Q491,275 474,263" stroke="#6b21a8" stroke-width="2" fill="none"/>
+    <line x1="508" y1="288" x2="508" y2="330" stroke="#9333ea" stroke-width="2"/>
+    <circle cx="508" cy="333" r="5" fill="#6b21a8"/>
+  </g>
+
+  <!-- Right balloons -->
+  <g class="bb" style="transform-origin:880px 290px;animation-delay:0.4s">
+    <ellipse cx="880" cy="268" rx="26" ry="33" fill="#38bdf8"/>
+    <ellipse cx="880" cy="261" rx="9" ry="7" fill="#bae6fd" opacity="0.6"/>
+    <path d="M880,301 Q885,317 878,333" stroke="#0369a1" stroke-width="2" fill="none"/>
+  </g>
+  <g class="ba" style="transform-origin:928px 275px;animation-delay:1s">
+    <ellipse cx="930" cy="252" rx="22" ry="28" fill="#4ade80"/>
+    <ellipse cx="930" cy="246" rx="8" ry="6" fill="#bbf7d0" opacity="0.5"/>
+    <path d="M930,280 Q935,295 928,310" stroke="#166534" stroke-width="2" fill="none"/>
+  </g>
+  <g class="bc" style="transform-origin:832px 278px;animation-delay:0.2s">
+    <ellipse cx="832" cy="258" rx="22" ry="28" fill="#fb923c"/>
+    <ellipse cx="832" cy="252" rx="7" ry="6" fill="#fed7aa" opacity="0.5"/>
+    <path d="M832,286 Q837,300 830,316" stroke="#c2410c" stroke-width="2" fill="none"/>
+  </g>
+  <g class="ba" style="transform-origin:790px 305px;animation-delay:1.3s">
+    <ellipse cx="788" cy="292" rx="18" ry="22" fill="#f472b6"/>
+    <ellipse cx="788" cy="287" rx="6" ry="5" fill="#fce7f3" opacity="0.5"/>
+    <path d="M788,314 Q792,325 786,337" stroke="#be185d" stroke-width="2" fill="none"/>
+  </g>
+
+  <!-- Stage -->
+  <rect x="330" y="405" width="340" height="22" rx="7" fill="#2d0058" stroke="#6d28d9" stroke-width="1"/>
+  <rect x="355" y="390" width="290" height="18" rx="4" fill="#1a0033" stroke="#7c3aed" stroke-width="1.5"/>
+
+  <!-- Speakers -->
+  <rect x="130" y="375" width="75" height="80" rx="7" fill="#130020" stroke="#7c3aed" stroke-width="1.5"/>
+  <circle cx="167" cy="402" r="22" fill="#0a0015" stroke="#6d28d9" stroke-width="1.5"/>
+  <circle cx="167" cy="402" r="13" fill="#160030" stroke="#7c3aed" stroke-width="0.5"/>
+  <circle cx="167" cy="402" r="5" fill="#4c1d95"/>
+  <rect x="140" y="425" width="55" height="10" rx="2" fill="#0a0015" stroke="#6d28d9" stroke-width="0.5"/>
+  <rect x="795" y="375" width="75" height="80" rx="7" fill="#130020" stroke="#7c3aed" stroke-width="1.5"/>
+  <circle cx="832" cy="402" r="22" fill="#0a0015" stroke="#6d28d9" stroke-width="1.5"/>
+  <circle cx="832" cy="402" r="13" fill="#160030" stroke="#7c3aed" stroke-width="0.5"/>
+  <circle cx="832" cy="402" r="5" fill="#4c1d95"/>
+  <rect x="805" y="425" width="55" height="10" rx="2" fill="#0a0015" stroke="#6d28d9" stroke-width="0.5"/>
+
+  <!-- DJ decks -->
+  <rect x="370" y="372" width="100" height="22" rx="4" fill="#1a0033" stroke="#9333ea" stroke-width="1"/>
+  <circle cx="408" cy="383" r="10" fill="#0a0015" stroke="#7c3aed" stroke-width="1"/>
+  <circle cx="408" cy="383" r="4" fill="#4c1d95"/>
+  <rect x="424" y="378" width="35" height="5" rx="2" fill="#4c1d95"/>
+  <rect x="424" y="386" width="25" height="5" rx="2" fill="#6d28d9"/>
+  <rect x="530" y="372" width="100" height="22" rx="4" fill="#1a0033" stroke="#9333ea" stroke-width="1"/>
+  <circle cx="592" cy="383" r="10" fill="#0a0015" stroke="#7c3aed" stroke-width="1"/>
+  <circle cx="592" cy="383" r="4" fill="#4c1d95"/>
+  <rect x="536" y="378" width="35" height="5" rx="2" fill="#6d28d9"/>
+  <rect x="536" y="386" width="25" height="5" rx="2" fill="#4c1d95"/>
+
+  <!-- Floor lights -->
+  <ellipse cx="200" cy="425" rx="70" ry="14" fill="#f472b6" opacity="0.2" class="beam1"/>
+  <ellipse cx="400" cy="425" rx="65" ry="12" fill="#fbbf24" opacity="0.2" class="beam2"/>
+  <ellipse cx="500" cy="425" rx="60" ry="12" fill="#c084fc" opacity="0.25" class="beam3"/>
+  <ellipse cx="610" cy="425" rx="65" ry="12" fill="#38bdf8" opacity="0.2" class="beam1"/>
+  <ellipse cx="800" cy="425" rx="70" ry="14" fill="#4ade80" opacity="0.2" class="beam2"/>
+
+  <!-- Silhouette dancers -->
+  <g fill="#2d0058">
+    <ellipse cx="240" cy="468" rx="12" ry="12"/>
+    <rect x="231" y="480" width="18" height="35" rx="4"/>
+    <line x1="231" y1="488" x2="218" y2="504" stroke="#2d0058" stroke-width="5" stroke-linecap="round"/>
+    <line x1="249" y1="488" x2="264" y2="498" stroke="#2d0058" stroke-width="5" stroke-linecap="round"/>
+    <line x1="233" y1="515" x2="223" y2="536" stroke="#2d0058" stroke-width="5" stroke-linecap="round"/>
+    <line x1="245" y1="515" x2="255" y2="536" stroke="#2d0058" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g fill="#2a0050">
+    <ellipse cx="310" cy="462" rx="12" ry="12"/>
+    <rect x="301" y="474" width="18" height="35" rx="4"/>
+    <line x1="301" y1="480" x2="284" y2="468" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="319" y1="480" x2="334" y2="470" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="303" y1="509" x2="292" y2="530" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="315" y1="509" x2="326" y2="530" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g fill="#320060">
+    <ellipse cx="690" cy="468" rx="12" ry="12"/>
+    <rect x="681" y="480" width="18" height="35" rx="4"/>
+    <line x1="681" y1="488" x2="666" y2="474" stroke="#320060" stroke-width="5" stroke-linecap="round"/>
+    <line x1="699" y1="488" x2="714" y2="498" stroke="#320060" stroke-width="5" stroke-linecap="round"/>
+    <line x1="683" y1="515" x2="673" y2="536" stroke="#320060" stroke-width="5" stroke-linecap="round"/>
+    <line x1="695" y1="515" x2="705" y2="536" stroke="#320060" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g fill="#2a0050">
+    <ellipse cx="760" cy="462" rx="12" ry="12"/>
+    <rect x="751" y="474" width="18" height="35" rx="4"/>
+    <line x1="751" y1="480" x2="734" y2="492" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="769" y1="480" x2="784" y2="468" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="753" y1="509" x2="742" y2="530" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+    <line x1="765" y1="509" x2="776" y2="530" stroke="#2a0050" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Music notes -->
+  <g fill="#e879f9" opacity="0.7" class="tw1">
+    <circle cx="280" cy="310" r="7"/>
+    <line x1="287" y1="310" x2="287" y2="286" stroke="#e879f9" stroke-width="2.5"/>
+    <line x1="287" y1="286" x2="302" y2="291" stroke="#e879f9" stroke-width="2.5"/>
+  </g>
+  <g fill="#38bdf8" opacity="0.7" class="tw4">
+    <circle cx="720" cy="298" r="7"/>
+    <line x1="727" y1="298" x2="727" y2="274" stroke="#38bdf8" stroke-width="2.5"/>
+    <line x1="727" y1="274" x2="742" y2="279" stroke="#38bdf8" stroke-width="2.5"/>
+  </g>
+</svg>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <h1>LET'S PARTY!</h1>
+  <p class="sub">✦ &nbsp; THE NIGHT IS YOUNG &nbsp; ✦</p>
+  <button class="btn" onclick="this.textContent='🎉 LET\'S GOOO!'">JOIN THE PARTY</button>
+</div>
+
+</body>
+</html>
