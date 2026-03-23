@@ -451,6 +451,7 @@
     adminSeq += e.key.toLowerCase();
     if (adminSeq.length > 8) adminSeq = adminSeq.slice(-8);
     if (adminSeq.includes('admin')) { openAdmin(); adminSeq = ''; }
+    if (window.location.hash === '#admin') openAdmin();
   });
 
   function openAdmin() {
